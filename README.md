@@ -1,0 +1,123 @@
+# 🛠 c-tools · Windows CLI Suite
+
+A collection of professional PowerShell utilities for Windows developers.
+Inspired by Linux ergonomics — clean aliases, UTF-8 output, comment-based help.
+
+---
+
+## Installation
+
+**One-time setup — add `C:\tools\PowerShell\bin` to your PATH:**
+
+```powershell
+# Run once in an elevated PowerShell session
+$toolsPath = "C:\tools\PowerShell\bin"
+$current = [Environment]::GetEnvironmentVariable("Path", "Machine")
+if ($current -notlike "*$toolsPath*") {
+    [Environment]::SetEnvironmentVariable("Path", "$current;$toolsPath", "Machine")
+    Write-Host "Added $toolsPath to system PATH. Restart your terminal."
+}
+```
+
+After restarting your terminal, all aliases below are available globally.
+
+---
+
+## Tools
+
+| Alias | Script | Description |
+|-------|--------|-------------|
+| `stree` | [Show-Tree.ps1](scripts/Show-Tree/README.md) | Print a directory tree (like Linux `tree`) |
+| `gsum` | [Get-GitSummary.ps1](scripts/Get-GitSummary/README.md) | Git repository summary — branch, sync, commits, tree |
+
+---
+
+## Usage
+
+### `stree` — Directory Tree
+
+```
+stree [<Path>] [-Depth <n>] [-GitIgnore] [-DirectoriesOnly] [-Ignore <names>] [-Export <file>]
+```
+
+```
+stree                          # current directory, depth 3
+stree C:\Projects\MyApp -Depth 5
+stree -GitIgnore -DirectoriesOnly
+stree -Export tree.txt
+stree -?                       # full help
+```
+
+### `gsum` — Git Repository Summary
+```
+gsum [<Path>] [-Commits <n>] [-Stashes] [-Open] [-NoColor]
+```
+```
+gsum                           # summary for the repo in the current directory
+gsum C:\Projects\myapp         # summary for a specific repo
+gsum -Commits 10               # show last 10 commits instead of 5
+gsum -Stashes                  # expand stash list with full messages
+gsum -Open                     # open the remote URL in the browser
+gsum -NoColor                  # plain text output — useful for piping or logging
+gsum -?                        # full help
+```
+
+---
+
+## Getting Help
+
+Every script has full comment-based help. Run `-?` or `Get-Help` on any script:
+
+```powershell
+stree -?
+Get-Help C:\tools\PowerShell\scripts\Show-Tree\Show-Tree.ps1 -examples
+Get-Help C:\tools\PowerShell\scripts\Show-Tree\Show-Tree.ps1 -detailed
+Get-Help C:\tools\PowerShell\scripts\Show-Tree\Show-Tree.ps1 -full
+Get-Help C:\tools\PowerShell\scripts\Show-Tree\Show-Tree.ps1 -online
+```
+
+---
+
+## Requirements
+
+- Windows 10/11
+- PowerShell 5.1+ (built-in) or PowerShell 7+ (recommended)
+- Git installed and available in PATH (required for `gsum`)
+- No external module dependencies
+
+---
+
+## Repository Structure
+
+```
+C:\tools\PowerShell\
+├── bin\
+│   ├── gsum.cmd
+│   └── stree.cmd
+├── scripts\
+│   ├── Get-GitSummary\
+│   │   ├── Get-GitSummary.ps1
+│   │   └── README.md
+│   └── Show-Tree\
+│       ├── Show-Tree.ps1
+│       └── README.md
+└── README.md
+```
+
+---
+
+## Contributing
+
+Scripts follow these conventions:
+
+- `[CmdletBinding()]` on every script
+- Comment-based help with `.SYNOPSIS`, `.DESCRIPTION`, `.PARAMETER`, `.EXAMPLE`, `.LINK`
+- UTF-8 safe output where text is printed
+- `SupportsShouldProcess` on any script that modifies files or kills processes
+- Alias name: short (≤7 chars), lowercase, no hyphens
+
+---
+
+## License
+
+MIT — use freely, attribution appreciated.

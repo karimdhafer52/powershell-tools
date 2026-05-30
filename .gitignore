@@ -1,0 +1,29 @@
+# PowerShell
+*.psm1
+*.psd1
+profile.ps1
+
+# Exported output files
+*.txt
+*.log
+*.csv
+*.json
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Temp / test
+scratch/
+tmp/
+test/
+
+# Not published yet
+scripts/Git-Commit-Message/

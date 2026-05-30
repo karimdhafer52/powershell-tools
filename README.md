@@ -25,10 +25,10 @@ After restarting your terminal, all aliases below are available globally.
 
 ## Tools
 
-| Alias | Script | Description |
-|-------|--------|-------------|
-| `stree` | [Show-Tree.ps1](scripts/Show-Tree/README.md) | Print a directory tree (like Linux `tree`) |
-| `gsum` | [Get-GitSummary.ps1](scripts/Get-GitSummary/README.md) | Git repository summary — branch, sync, commits, tree |
+| Alias | Wrapper | Script | Description |
+|-------|---------|--------|-------------|
+| `stree` | [stree.cmd](bin/stree.cmd) | [Show-Tree.ps1](scripts/Show-Tree/README.md) | Print a directory tree (like Linux `tree`) |
+| `gsum` | [gsum.cmd](bin/gsum.cmd) | [Get-GitSummary.ps1](scripts/Get-GitSummary/README.md) | Git repository summary — branch, sync, commits, tree |
 
 ---
 
@@ -78,6 +78,24 @@ Get-Help C:\tools\PowerShell\scripts\Show-Tree\Show-Tree.ps1 -online
 
 ---
 
+## How It Works — CMD Wrappers
+
+Each alias (e.g. `gsum`, `stree`) is a thin `.cmd` file in `bin/` that calls the actual PowerShell script.
+This is necessary because PowerShell `.ps1` files cannot be invoked directly from `cmd.exe`, the Windows Run dialog, or some terminals without explicit policy configuration.
+
+The wrapper handles this transparently:
+
+```cmd
+@echo off
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0..\scripts\Get-GitSummary\Get-GitSummary.ps1" %*
+```
+
+- `-NoProfile` — skips loading your PowerShell profile for faster startup  
+- `-ExecutionPolicy Bypass` — runs the script regardless of system execution policy  
+- `%*` — forwards all arguments you pass to the alias straight to the script
+
+---
+
 ## Requirements
 
 - Windows 10/11
@@ -91,7 +109,7 @@ Get-Help C:\tools\PowerShell\scripts\Show-Tree\Show-Tree.ps1 -online
 
 ```
 C:\tools\PowerShell\
-├── bin\
+├── bin\                   ← CMD wrappers — this folder goes on your PATH
 │   ├── gsum.cmd
 │   └── stree.cmd
 ├── scripts\
